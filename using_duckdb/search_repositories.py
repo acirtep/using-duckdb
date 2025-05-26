@@ -47,10 +47,15 @@ def export_to_md(duckdb_conn):
                     '|', 
                     concat_ws(
                         '|',
-                        concat('[', name, '](', concat('https://github.com/', full_name),')'),
-                        coalesce(description, ' '),
-                        login,
-                        coalesce(name_1, 'unknown'),
+                        concat(
+                            concat('[', name, '](', concat('https://github.com/', full_name),')'),
+                            '<br>',
+                            coalesce(description, ' '),
+                            '<br>',
+                            concat('**License** ', coalesce(name_1, 'unknown')),
+                            '<br>',
+                            concat('**Owner** ', login)
+                        ),
                         coalesce(topics, '[]'),
                         coalesce(stargazers_count, 0),
                         coalesce(open_issues_count, 0),
@@ -61,17 +66,30 @@ def export_to_md(duckdb_conn):
                     '|'
                 ) as repo_line,
                 stargazers_count,
-                created_at
+                created_at,
+                updated_at,
+                login,
+                coalesce(fork, false) as fork,
+                coalesce(stargazers_count, 0) + coalesce(open_issues_count, 0) + coalesce(forks, 0) as activity_count
         """)
-        .order("created_at desc, stargazers_count desc")
+        .filter("""
+            login != 'duckdb'
+            and not fork
+            and activity_count >= 3
+        """)
+        .order("created_at desc, updated_at desc, stargazers_count desc")
         .string_agg("repo_line", sep="\n")
     ).fetchone()[0]
 
+    if not md_content:
+        raise ValueError("No data returned")
+
     with open("./repos.md", "w") as f_md:
-        f_md.write("# Repositories using `duckdb`, updated in the last 7 days")
+        f_md.write("# Repositories using `duckdb` \n")
+        f_md.write(f"A list of GitHub repositories which have an update in the last 7 days, as of {datetime.now()}.")
         f_md.write("\n\n")
-        f_md.write("|Name|Description|Owner|License|Topics|Stars|Open Issues|Forks|Created At|Updated At|")
-        f_md.write("\n|--|--|--|--|--|--|--|--|--|--|\n")
+        f_md.write("|Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|")
+        f_md.write("\n|--|--|--|--|--|--|--|\n")
         f_md.write(md_content)
 
 

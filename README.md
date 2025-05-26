@@ -1,5 +1,5 @@
 # Repositories using `duckdb` 
-A list of GitHub repositories, which have an update in the last 7 days, as of 2025-05-26 15:48:28.842443.
+A list of GitHub repositories, which have an update in the last 7 days, as of 2025-05-26 13:50:53.944978.
 
 |Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|
 |--|--|--|--|--|--|--|

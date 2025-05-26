@@ -9,7 +9,7 @@ env:
   READ_PUBLIC_REPO_TOKEN : ${{ secrets.READ_PUBLIC_REPO_TOKEN }}
 
 jobs:
-  make-repo-md:
+  make-readme-md:
     runs-on: ubuntu-latest
 
     permissions:
@@ -26,10 +26,10 @@ jobs:
       - name: Install the project
         run: uv sync
 
-      - name: Build repo.md
+      - name: Build
         run: uv run using_duckdb/search_repositories.py
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'Update repo.md as of ${{ github.event.repository.updated_at}}'
-          file_pattern: 'repos.md'
+          commit_message: 'Update as of ${{ github.event.repository.updated_at}}'
+          file_pattern: 'README.md'

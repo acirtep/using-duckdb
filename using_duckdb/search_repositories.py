@@ -84,9 +84,9 @@ def export_to_md(duckdb_conn):
     if not md_content:
         raise ValueError("No data returned")
 
-    with open("./repos.md", "w") as f_md:
+    with open("./README.md", "w") as f_md:
         f_md.write("# Repositories using `duckdb` \n")
-        f_md.write(f"A list of GitHub repositories which have an update in the last 7 days, as of {datetime.now()}.")
+        f_md.write(f"A list of GitHub repositories, which have an update in the last 7 days, as of {datetime.now()}.")
         f_md.write("\n\n")
         f_md.write("|Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|")
         f_md.write("\n|--|--|--|--|--|--|--|\n")

@@ -26,10 +26,16 @@ jobs:
       - name: Install the project
         run: uv sync
 
-      - name: Build
+      - name: Get search results
         run: uv run using_duckdb/search_repositories.py
+
+      - name: Parse git log and diff
+        run: make git-log
+
+      - name: Generate chart
+        run: uv run using_duckdb/plot_results.py
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'Update as of ${{ github.event.repository.updated_at}}'
-          file_pattern: 'README.md'
+          file_pattern: 'README.md, plot.html'

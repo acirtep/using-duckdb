@@ -14,11 +14,13 @@ def write_plot():
             #4 as stars,
             #5 open_issues,
             #6 as forks,
-            #7 as created_at,
+            strftime(#7, '%B %d, %Y, %H:%m' ) as created_at,
             #8 as updated_at,
             if(stars + forks + open_issues = 0, 0, log(stars + forks + open_issues)) as log_activity_count,
             substr(repo, position('[' in repo) + 1 , position(']' in repo) - 2) as repo_name,
-            count(distinct updated_at::date) over (partition by repo_name) as number_of_updates
+            count(distinct updated_at::date) 
+                over 
+            (partition by repo_name order by updated_at ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) as number_of_updates
         """)
         .order("updated_at"),
         x="updated_at",
@@ -30,13 +32,15 @@ def write_plot():
             "open_issues": True,
             "forks": True,
             "repo_name": False,
+            "created_at": True,
             "updated_at": True,
             "log_activity_count": False,
         },
         size="number_of_updates",
         text="repo_name",
         title="Repositories, using duckdb, updated in the last 7 days",
-    ).update_layout(showlegend=False).update_yaxes(visible=False, showticklabels=False).write_html("./plot.html")
+        labels={"log_activity_count": "Activity count, based on stars, open issues and forks"},
+    ).update_layout(showlegend=False).update_yaxes(showticklabels=False).write_html("./plot.html")
 
 
 if __name__ == "__main__":

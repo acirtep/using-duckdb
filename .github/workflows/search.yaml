@@ -3,7 +3,7 @@ name: Search
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '45 9 * * *'
 
 env:
   READ_PUBLIC_REPO_TOKEN : ${{ secrets.READ_PUBLIC_REPO_TOKEN }}

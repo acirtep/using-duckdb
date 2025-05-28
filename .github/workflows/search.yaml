@@ -28,13 +28,16 @@ jobs:
         run: uv sync
 
       - name: Get search results
-        run: uv run using_duckdb/search_repositories.py
+        run: make search-repos
+
+      - name: Export current results
+        run: make readme
 
       - name: Parse git log and diff
         run: make git-log
 
       - name: Generate chart
-        run: uv run using_duckdb/plot_results.py
+        run: make plot
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:

@@ -39,58 +39,80 @@ def get_search_requirements(duckdb_conn):
 
 
 def export_to_md(duckdb_conn):
-    md_content = (
+    selected_data = (
         duckdb_conn.table("github_raw_data")
         .select("unnest(items, recursive := true)")
         .select("""
-                concat(
-                    '|', 
-                    concat_ws(
-                        '|',
-                        concat(
-                            concat('[', name, '](', concat('https://github.com/', full_name),')'),
-                            '<br>',
-                            coalesce(description, ' '),
-                            '<br>',
-                            concat('**License** ', coalesce(name_1, 'unknown')),
-                            '<br>',
-                            concat('**Owner** ', login)
-                        ),
-                        coalesce(topics, '[]'),
-                        coalesce(stargazers_count, 0),
-                        coalesce(open_issues_count, 0),
-                        coalesce(forks, 0),
-                        created_at,
-                        updated_at
-                    ),
-                    '|'
-                ) as repo_line,
-                stargazers_count,
-                created_at,
-                updated_at,
-                login,
-                coalesce(fork, false) as fork,
-                coalesce(stargazers_count, 0) + coalesce(open_issues_count, 0) + coalesce(forks, 0) as activity_count
+            concat(
+                concat('[', name, '](', concat('https://github.com/', full_name),')'),
+                '<br>',
+                coalesce(description, ' '),
+                '<br>',
+                concat('**License** ', coalesce(name_1, 'unknown')),
+                '<br>',
+                concat('**Owner** ', login)
+            ) as repo_details,
+            coalesce(topics, '[]')::varchar as topics,
+            coalesce(stargazers_count, 0) as stars,
+            coalesce(open_issues_count, 0) as open_issues,
+            coalesce(forks, 0) as forks,
+            created_at,
+            updated_at,
+            login,
+            coalesce(fork, false) as fork,
+            stars + open_issues + forks as activity_count
         """)
         .filter("""
             login != 'duckdb'
             and not fork
             and activity_count >= 3
         """)
-        .order("created_at desc, updated_at desc, stargazers_count desc")
-        .string_agg("repo_line", sep="\n")
-    ).fetchone()[0]
-
-    if not md_content:
-        raise ValueError("No data returned")
-
-    with open("./README.md", "w") as f_md:
-        f_md.write("# Repositories using `duckdb` \n")
-        f_md.write(f"A list of GitHub repositories, which have an update in the last 7 days, as of {datetime.now()}.")
-        f_md.write("\n\n")
-        f_md.write("|Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|")
-        f_md.write("\n|--|--|--|--|--|--|--|\n")
-        f_md.write(md_content)
+        .select("""
+            NULL,
+            repo_details,
+            topics,
+            stars,
+            open_issues,
+            forks,
+            created_at,
+            updated_at,
+            NULL
+        """)
+        .order("""
+            created_at desc,
+            updated_at desc,
+            stars desc
+        """)
+    )
+    (
+        duckdb_conn.sql("""
+                select 
+                    NULL,
+                    'Name',
+                    'Topics',
+                    'Stars',
+                    'Open Issues',
+                    'Forks',
+                    'Created At',
+                    'Updated At',
+                    NULL
+            """)
+        .union(
+            duckdb_conn.sql("""
+            select 
+                NULL as '',
+                '--' as "Name",
+                '--' as "Topics",
+                '--' as "Stars",
+                '--' as "Open Issues",
+                '--' as "Forks",
+                '--' as "Created At",
+                '--' as "Updated At",
+                NULL as ''
+        """)
+        )
+        .union(selected_data)
+    ).to_csv("./exported_records.md", sep="|", header=False)
 
 
 def main():

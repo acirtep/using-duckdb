@@ -174,3 +174,4 @@ cython_debug/
 .pypirc
 /data/
 git_log.txt
+exported_records.md

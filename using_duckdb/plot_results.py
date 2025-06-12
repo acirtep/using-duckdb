@@ -20,8 +20,10 @@ def write_plot():
             substr(repo, position('[' in repo) + 1 , position(']' in repo) - 2) as repo_name,
             count(distinct updated_at::date) 
                 over 
-            (partition by repo_name order by updated_at ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) as number_of_updates
+            (partition by repo_name order by updated_at ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) as number_of_updates,
+            row_number() over (partition by repo_name, updated_at::date order by updated_at desc) as rn
         """)
+        .filter("rn = 1")
         .order("updated_at"),
         x="updated_at",
         y="log_activity_count",
@@ -38,7 +40,7 @@ def write_plot():
         },
         size="number_of_updates",
         text="repo_name",
-        title="Repositories, using duckdb, updated in the last 7 days",
+        title="Repositories mentioning duckdb",
         labels={"log_activity_count": "Activity count, based on stars, open issues and forks"},
     ).update_layout(showlegend=False).update_yaxes(showticklabels=False).write_html("./plot.html")
 

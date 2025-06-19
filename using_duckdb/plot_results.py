@@ -23,7 +23,7 @@ def write_plot():
             (partition by repo_name order by updated_at ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) as number_of_updates,
             row_number() over (partition by repo_name, updated_at::date order by updated_at desc) as rn
         """)
-        .filter("rn = 1")
+        .filter("rn = 1 and updated_at >= now() - interval '2 weeks'")
         .order("updated_at"),
         x="updated_at",
         y="log_activity_count",

@@ -43,13 +43,11 @@ def export_to_md(duckdb_conn):
         duckdb_conn.table("github_raw_data")
         .select("unnest(items, recursive := true)")
         .select("""
-            concat(
+            concat_ws(
+                '<br>',
                 concat('[', name, '](', concat('https://github.com/', full_name),')'),
-                '<br>',
                 coalesce(description, ' '),
-                '<br>',
                 concat('**License** ', coalesce(name_1, 'unknown')),
-                '<br>',
                 concat('**Owner** ', login)
             ) as repo_details,
             coalesce(topics, '[]')::varchar as topics,

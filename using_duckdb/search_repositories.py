@@ -168,7 +168,6 @@ def main():
     duckdb_conn = get_duckdb_conn()
     get_search_requirements(duckdb_conn)
     export_to_md(duckdb_conn)
-    # export_to_readme(duckdb_conn)
 
 
 if __name__ == "__main__":

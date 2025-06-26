@@ -11,9 +11,10 @@ readme:
 	cat exported_records.md >> README.md
 
 git-log:
-	echo '|Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|' > git_log.txt && \
-	git log --follow -p --pretty=format:"" -- README.md | grep '^+|\[' | sed 's/^+//' >> git_log.txt && \
-	git diff -- README.md | grep '^+|\[' | sed 's/^+//' >> git_log.txt
+	echo '|Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|' > git_log.md && \
+	echo '|--|--|--|--|--|--|--|' >> git_log.md && \
+	git log --follow -p --pretty=format:"" -- README.md | grep '^+|\[' | sed 's/^+//' >> git_log.md && \
+	git diff -- README.md | grep '^+|\[' | sed 's/^+//' >> git_log.md
 
 plot:
 	uv run using_duckdb/plot_results.py

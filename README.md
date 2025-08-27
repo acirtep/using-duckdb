@@ -1,9 +1,6 @@
 # Repositories using `duckdb`
 |Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|
 |--|--|--|--|--|--|--|
-|[DuckDBrcl](https://github.com/jlzfw4588/DuckDBrcl)<br> <br>**License** unknown<br>**Owner** jlzfw4588|[]|8|0|0|2025-08-25 16:16:19|2025-08-27 05:34:28|
-|[DuckDBzeg](https://github.com/dzitho2221441/DuckDBzeg)<br> <br>**License** unknown<br>**Owner** dzitho2221441|[]|8|0|0|2025-08-21 10:26:59|2025-08-27 05:22:20|
-|[DuckDBjal](https://github.com/0xeepotpyrcdyor-create/DuckDBjal)<br> <br>**License** unknown<br>**Owner** 0xeepotpyrcdyor-create|[]|8|0|0|2025-08-21 03:48:38|2025-08-23 13:34:49|
 |[php-duckdb](https://github.com/fnvoid64/php-duckdb)<br>PHP DuckDB Extension<br>**License** unknown<br>**Owner** fnvoid64|[]|3|0|0|2025-08-19 12:24:27|2025-08-26 22:29:39|
 |[textplot](https://github.com/Query-farm/textplot)<br>A DuckDB community extension that enables text-based data visualization directly in SQL queries, including ASCII/Unicode bar charts, density plots, and sparklines for lightweight analytics and dashboards.<br>**License** MIT License<br>**Owner** Query-farm|[bar-char, density-plots, duckdb, duckdb-extension, progress-bar, sparkline, sparkline-graphs, text-plotting]|4|0|1|2025-08-17 15:19:13|2025-08-26 07:47:18|
 |[DuckDB-SQL-Practice-Guide](https://github.com/Aryan-Maini/DuckDB-SQL-Practice-Guide)<br>This is a DuckDB SQL workbook, it's for people who want to work with DuckDB. it also has medium to expert level questions on Pure SQL.<br>**License** Creative Commons Zero v1.0 Universal<br>**Owner** Aryan-Maini|[data-analysis, database, duckdb, learning, practice, sql]|6|0|0|2025-08-14 11:31:19|2025-08-23 11:53:02|

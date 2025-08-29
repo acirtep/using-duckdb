@@ -1,4 +1,7 @@
 # Repositories using `duckdb`
+
+**Last updated on 26th August 2025**.
+
 |Name|Topics|Stars|Open Issues|Forks|Created At|Updated At|
 |--|--|--|--|--|--|--|
 |[php-duckdb](https://github.com/fnvoid64/php-duckdb)<br>PHP DuckDB Extension<br>**License** unknown<br>**Owner** fnvoid64|[]|3|0|0|2025-08-19 12:24:27|2025-08-26 22:29:39|
